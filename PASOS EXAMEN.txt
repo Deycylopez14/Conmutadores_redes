@@ -1,0 +1,129 @@
+PASOS DE LA CONFIGURACION
+
+Switch>ena
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname estrella
+estrella(config)#vlan 10
+estrella(config-vlan)#name ADMINISTRACION
+estrella(config-vlan)#exit
+estrella(config)#vlan 20
+estrella(config-vlan)#name MARKETING
+estrella(config-vlan)#exit
+estrella(config)#do wr
+Building configuration...
+[OK]
+estrella(config)#inter range fa0/1-10
+estrella(config-if-range)#switchport mode access
+estrella(config-if-range)#switchport access vlan 10
+estrella(config-if-range)#exit
+estrella(config)#inter range fa0/11-20
+estrella(config-if-range)#switchport mode access
+estrella(config-if-range)#switchport access vlan 20
+estrella(config-if-range)#exit
+estrella(config)#inter fa0/21
+estrella(config-if)#switchport mode trunk
+estrella(config-if)#switchport trunk allowed vlan 10,20
+estrella(config-if)#exit
+estrella(config)#do wr
+
+estrella>ena
+estrella#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+estrella(config)#vlan 30
+estrella(config-vlan)#name mercurio
+estrella(config-vlan)#exit
+estrella(config)#exit
+estrella#
+%SYS-5-CONFIG_I: Configured from console by console
+
+estrella#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+estrella(config)#inter fa0/21
+estrella(config-if)#switchport mode access vlan 30
+                                           ^
+% Invalid input detected at '^' marker.
+	
+estrella(config-if)#switchport mode access
+estrella(config-if)#switchport access vlan 30
+estrella(config-if)#exit
+estrella(config)#inter fa0/21
+estrella(config-if)#switchport trunk
+% Incomplete command.
+estrella(config-if)#switchport mode trunk
+
+estrella(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/21, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/21, changed state to up
+
+estrella(config-if)#switchport trunk allowed vlan 10,20,30
+estrella(config-if)#exit
+estrella(config)#do wr
+-------------------------------------------------------
+
+Router>ena
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname galaxia
+galaxia(config)#inter g0/0/0.10
+galaxia(config-subif)#encapsulation dot1q 10
+galaxia(config-subif)#ip address 192.168.51.1 255.255.254.0
+galaxia(config-subif)#exit
+galaxia(config)#inter g0/0/0.20
+galaxia(config-subif)#encapsulation dot1q 20
+galaxia(config-subif)#ip address 192.168.52.1 255.255.254.0
+galaxia(config-subif)#exit
+galaxia(config)#inter g0/0/0
+galaxia(config-if)#no sh
+
+galaxia(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/0, changed state to up
+
+%LINK-5-CHANGED: Interface GigabitEthernet0/0/0.10, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/0.10, changed state to up
+
+%LINK-5-CHANGED: Interface GigabitEthernet0/0/0.20, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/0.20, changed state to up
+
+galaxia(config-if)#exit
+galaxia(config)#do wr
+Building configuration...
+[OK]
+galaxia(config)#inter g0/0/1
+galaxia(config-if)#ip address 10.0.0.1 255.0.0.0
+galaxia(config-if)#no sh
+
+galaxia(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1, changed state to up
+
+galaxia(config-if)#exit
+galaxia(config)#do wr
+Building configuration...
+[OK]
+galaxia(config)#ip routing
+galaxia(config)#exit
+galaxia#
+%SYS-5-CONFIG_I: Configured from console by console
+
+galaxia(config)#inter g0/0/0.30
+galaxia(config-subif)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0/0.30, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/0.30, changed state to up
+
+galaxia(config-subif)#encapsulation dot1q 30
+galaxia(config-subif)#ip address 10.0.0.1 255.255.254.0
+% 10.0.0.0 overlaps with GigabitEthernet0/0/1
+galaxia(config-subif)#exit
+galaxia(config)#do wr
+Building configuration...
+[OK]
+
+
